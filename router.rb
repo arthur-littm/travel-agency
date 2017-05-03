@@ -1,14 +1,15 @@
 class Router
-  def initialize(c_controller, u_controller)
+  def initialize(c_controller, u_controller, ticket_controller)
     @country_controller = c_controller
     @user_controller = u_controller
+    @ticket_controller = ticket_controller
     @running = true
   end
 
   def run
-    user = @user_controller.sign_in
+    @user = @user_controller.sign_in
     while @running
-      if user.travel_agent?
+      if @user.travel_agent?
         print_travel_agent_menu
         action = ask_user_for_action
         route_travel_agent_action(action)
@@ -39,7 +40,7 @@ class Router
     when 2 then @country_controller.add
     when 3 then @user_controller.list
     when 4 then @user_controller.add
-    when 5 then "TODO list all tickets"
+    when 5 then @ticket_controller.list
     else
       puts "wrong choice!"
     end
@@ -54,8 +55,8 @@ class Router
 
   def route_customer_action(action)
     case action
-    when 1 then "TODO list user tickets"
-    when 2 then "TODO buy a ticket"
+    when 1 then @ticket_controller.list_user_ticket(@user)
+    when 2 then @ticket_controller.add(@user)
     else
       puts "wrong choice!"
     end

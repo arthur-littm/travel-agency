@@ -3,4 +3,5 @@ class BaseView
     puts "#{something}?"
     return gets.chomp
   end
+
 end
