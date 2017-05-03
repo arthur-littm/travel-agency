@@ -1,4 +1,5 @@
-id,username,password
-1,john,secret
-2,alex,test
-3,arthur,secret
+id,username,password,role
+1,john,secret,customer
+2,alex,secret,customer
+3,arthur,secret,travel_agent
+4,will,secret,customer

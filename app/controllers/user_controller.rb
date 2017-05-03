@@ -1,15 +1,15 @@
 require_relative '../views/user_view.rb'
 
 class  UserController
-  def initialize(user_repo)
-    @repo = user_repo
+  def initialize(user_repository)
+    @user_repository = user_repository
     @view = UserView.new
   end
 
   # -> list all the available users
   def list
-    # ask the repo for a list of all the users
-    users = @repo.all
+    # ask the user_repository for a list of all the users
+    users = @user_repository.all
     # pass that list to the view to display
     @view.list_users(users)
   end
@@ -22,8 +22,25 @@ class  UserController
     new_user_continent = @view.ask_user_for(:password)
     # create an instance of `Country` based on what the user said
     new_user = User.new(username: new_user_name, password: new_user_continent)
-    # adding in to the repo
-    @repo.add(new_user)
+    # adding in to the user_repository
+    @user_repository.add(new_user)
+  end
+
+  def sign_in
+    # 1. Ask user for username
+    username = @view.ask_user_for("username")
+    # 2. Ask user for password
+    password = @view.ask_user_for("password")
+    # 3. Find the user with the username
+    user = @user_repository.find_by_username(username)
+    # 4. Compare the password given with the one in DB.
+    if user && user.password == password
+      @view.signed_in_successfully(user)
+      return user
+    else
+      @view.wrong_credentials
+      sign_in # Recursive call
+    end
   end
 end
 
